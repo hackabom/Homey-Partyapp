@@ -1,12 +1,9 @@
-### Sample Homey App
+### Party with Homey!
 
-This is a demo app. It can do the following:
+This app is dank as fuck:
 
-1. Listen to speech
-2. Control the LED ring
-3. Show a card on the mobile phone
-4. Expose a settings screen
-5. Expose a few Flow Editor cards
-6. Register a virtual light bulb (driver)
+1. Play truth or dare with all your friends!
+2. Is that too boring? Try russian roulette!
+3. Try Twister, if you have a Twister mat!
 
-Load this app in your Homey Devkit to explore its contents!
+Never feel bored again!!
