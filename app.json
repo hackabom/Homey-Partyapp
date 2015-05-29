@@ -124,6 +124,26 @@
           "yeah"
         ]
       }
+    },
+    {
+      "id": "roulette",
+      "importance": 1,
+      "synonyms": {
+        "en": [
+          "roulette",
+          "roelet",
+          "russian"
+        ]
+      }
+    },
+    {
+      "id": "twister",
+      "importance": 1,
+      "synonyms": {
+        "en": [
+          "twister"
+        ]
+      }
     }
   ],
   "flow": {

@@ -1,7 +1,11 @@
 "use strict";
+var game = null;
 var inGame = false;
 var setupDone = false;
-var numberOfPlayers = 0;
+var RussianRoulette = require('./russian_roulette.js');
+var Twister = require('./twister.js');
+var Players = require('./players.js');
+Players.numberOfPlayers = 0;
 
 function App() 
 {
@@ -11,63 +15,10 @@ function App()
 module.exports = App;
 
 App.prototype.init = function(){
-	
 	Homey.manager('ledring').animate({
 		name: 'pulse'
 	});
   
-};
-
-// Players object
-var Players = {
-	total: 0,
-	names: [],
-	addPlayer: function (playerName) {
-
-		// Add player
-		this.names.push(playerName);
-		this.total++;
-
-		// Remaining players to add
-		if (this.total < numberOfPlayers) {
-			Players.askForNewPlayer();
-		}
-		// Setup done
-		else {
-			Homey.log("All setup, let's play!");
-			Homey.log(this.names);
-			setupDone = true;
-			RussianRoulette.intialize();
-		}
-	},
-	askForNewPlayer: function () {
-		Homey.log("What is the name of player " + (this.total + 1) + "?");
-	}
-};
-
-var RussianRoulette = {
-	title: 'Russian Roulette',
-	chamber: [1,2,3,4,5,6,7,8],
-	bullet: 4,
-	intialize: function () {
-		Homey.log("Let's start Russian roulette, are you ready?");
-	},
-	move: function() {
-		Homey.log(Players.names[0] + " be prepared...");
-		var result = Math.floor((Math.random() * this.chamber.length));
-		Homey.log(this.chamber);
-		Homey.log(this.chamber[result]);
-
-		if(this.chamber[result] == this.bullet){
-			Homey.log("YOU ARE DEAD");
-		} else {
-			Homey.log('Oef, just safe');
-		}
-		this.chamber.splice(result, 1);
-
-		Homey.log("Ready for the next move?");
-	}
-
 };
 
 App.prototype.speech = function( speech ) {
@@ -79,7 +30,7 @@ App.prototype.speech = function( speech ) {
         if( trigger.id == 'game' ) {
 			// Game mode on
 			inGame = true;
-			
+
            	Homey.log('Ok, great. How many players?');
 		}
 		// Get the number of players
@@ -88,7 +39,7 @@ App.prototype.speech = function( speech ) {
 			(trigger.id == '1')? Homey.log('Ok, lets setup for 1 player'): Homey.log('Ok, lets setup for ' + trigger. id +' players');
 			
 			// Init players
-			numberOfPlayers = parseInt(trigger.id);
+			Players.numberOfPlayers = parseInt(trigger.id);
 			Players.askForNewPlayer();
 		} 
 		else if ( trigger.id == 'robin' ) {
@@ -105,7 +56,18 @@ App.prototype.speech = function( speech ) {
 		}
 		// Russian Roulette
 		else if (trigger.id == 'yes') {
-			RussianRoulette.move();
+			if(Twister.running){
+				Twister.nextMove();
+
+			} else if (RussianRoulette.running) {
+				RussianRoulette.nextMove();
+			}
+		}
+		else if (trigger.id == 'roulette') {
+			RussianRoulette.initialize();
+		}
+		else if (trigger.id == 'twister') {
+			Twister.initialize();
 		}
 		// Quit game mode
 		else if ( trigger.id == 'quit') {
@@ -114,7 +76,5 @@ App.prototype.speech = function( speech ) {
 			// End game mode
 			inGame = false;
 		}
-        
     });
-        
 }
