@@ -20,13 +20,16 @@ App.prototype.init = function(){
 	});
   
 };
+
 var Players = {
 	total: 0,
 	names: [],
+	id: [],
 	initPlayer: function (playerName) {
 
 		// Add player
 		this.names.push(playerName);
+		this.names.push(total);
 		this.total++;
 
 		// Remaining players to add
@@ -41,6 +44,37 @@ var Players = {
 		}
 	}
 };
+
+var animate = function(){
+	var colors = ['blue','red','green','yellow','orange','purple'];
+	var ledsPP = Math.round(30/Players.total);
+	var animation = [];
+	for( var f = 0; f < 30; f++ ) {
+		var frame = {
+			duration: 6,
+			pixels: []
+		};
+
+		for( var i = 0; i < 30; i++ ) {			
+			var color = Homey.color(colors[Player.id]).saturation(0.1);
+			// one player segment
+			for( var j = 0; j < ledsPP; j++ ) {
+				if(i==(f+j)%30){
+					color = color.saturation(1);
+				}
+			}
+
+			frame.pixels.push([
+				Math.round(255 * color.red()),
+				Math.round(255 * color.green()),
+				Math.round(255 * color.blue())
+			]);
+		}
+
+		animation.push( frame );
+	}
+	Homey.manager('ledring').animate(animation);
+}
 
 
 var askForPlayer = function ( ) {
