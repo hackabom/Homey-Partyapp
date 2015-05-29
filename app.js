@@ -76,6 +76,36 @@ var animate = function(){
 	Homey.manager('ledring').animate(animation);
 }
 
+var Twister = {
+	limb: ["right arm", "left arm", "right hand", "left hand"],
+	color: ["red","green","yellow","blue"],
+	twist: function(){
+		var animation = [];
+		var curColor = this.color[Math.floor(Math.random() * 4)];
+		Homey.log('Put your' + this.limb[Math.floor(Math.random() * 4)] + 'on' + curColor + '!');
+		for( var f = 0; f < 30; f++ ) {
+			var frame = {
+				duration: 10,
+				pixels: []
+			};
+			for( var i = 0; i < 30; i++ ) {			
+				var color = Homey.color(curColor).saturation(0.1);
+				// create a tail
+				for( var j = 0; j < 4; j++ ) {
+					if( (i+j)%30 == f ) {
+						color = color.saturation(1/(j+1));
+					}
+				}
+				frame.pixels.push([
+					Math.round(255 * color.red()),
+					Math.round(255 * color.green()),
+					Math.round(255 * color.blue())
+				]);
+			}
+			Homey.manager('ledring').animate(animation);
+		}
+	}	
+}
 
 var askForPlayer = function ( ) {
 	Homey.log("What is the name of player " + (Players.total + 1) + "?");
