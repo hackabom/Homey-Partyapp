@@ -1,9 +1,7 @@
 "use strict";
 var inGame = false;
-var playersInitiated = false;
-var playersAdded = 0;
+var setupDone = false;
 var numberOfPlayers = 0;
-var players = [];
 
 function App() 
 {
@@ -22,31 +20,40 @@ App.prototype.init = function(){
 	});
   
 };
+var Players = {
+	total: 0,
+	names: [],
+	initPlayer: function (playerName) {
 
-var initiatePlayer = function ( playerNumber ) {
-	Homey.log("What is the name of player " + (playersAdded + 1) + "?");
-};
+		// Add player
+		this.names.push(playerName);
+		this.total++;
 
-
-var initiatePlayers = function () {
-
-	if(playersAdded < numberOfPlayers) {
-		initiatePlayer(playersAdded + 1);
-	} else {
-		Homey.log("All setup, let's play!");
-		Homey.log(players);
-		playersInitiated = true;
+		// Remaining players to add
+		if (this.total < numberOfPlayers) {
+			askForPlayer();
+		}
+		// Setup done
+		else {
+			Homey.log("All setup, let's play!");
+			Homey.log(this.names);
+			setupDone = true;
+		}
 	}
 };
 
-var continuePlayerInitiation = function () {
 
-}
+var askForPlayer = function ( ) {
+	Homey.log("What is the name of player " + (Players.total + 1) + "?");
+};
+
+
+
+
 App.prototype.speech = function( speech ) {
 	
 	// loop all triggers
     speech.triggers.forEach(function(trigger){
-
 		// Start a game
         if( trigger.id == 'game' ) {
 			// Game mode on
@@ -55,35 +62,25 @@ App.prototype.speech = function( speech ) {
            	Homey.log('Ok, great. How many players?');
 		}
 		// Get the number of players
-		else if( inGame && (!playersInitiated && (trigger.id == '1' || trigger.id == '2' || trigger.id == '3' || trigger.id == '4' || trigger.id == '5'))) {
+		else if( inGame && (!setupDone && (trigger.id == '1' || trigger.id == '2' || trigger.id == '3' || trigger.id == '4' || trigger.id == '5'))) {
 			// Respond
 			(trigger.id == '1')? Homey.log('Ok, lets setup for 1 player'): Homey.log('Ok, lets setup for ' + trigger. id +' players');
 			
 			// Init players
-			Homey.log(trigger.id);
 			numberOfPlayers = parseInt(trigger.id);
-			initiatePlayers();
+			askForPlayer();
 		} 
 		else if ( trigger.id == 'robin' ) {
 			Homey.log('Added Robin');
-
-			if(!playersInitiated) {
-				players[playersAdded] = trigger.id;
-				playersAdded++;
-				initiatePlayers();
-			}
-
+			Players.initPlayer(trigger.id);
 		}
 		else if ( trigger.id == 'floris' ) {
 			Homey.log('Added Floris');
-
-			if(!playersInitiated) {
-				players[playersAdded] = trigger.id;
-				playersAdded++;
-				initiatePlayers();
-			}
-			playersAdded++;
-
+			Players.initPlayer(trigger.id);
+		}
+		else if ( trigger.id == 'emile' ) {
+			Homey.log('Added Emile');
+			Players.initPlayer(trigger.id);
 		}
 		// Quit game mode
 		else if ( trigger.id == 'quit') {
