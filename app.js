@@ -11,19 +11,18 @@ function App()
 module.exports = App;
 
 App.prototype.init = function(){
-
-  	setInterval(function(){
-	}, 1000);
 	
 	Homey.manager('ledring').animate({
 		name: 'pulse'
 	});
   
 };
+
+// Players object
 var Players = {
 	total: 0,
 	names: [],
-	initPlayer: function (playerName) {
+	addPlayer: function (playerName) {
 
 		// Add player
 		this.names.push(playerName);
@@ -31,29 +30,51 @@ var Players = {
 
 		// Remaining players to add
 		if (this.total < numberOfPlayers) {
-			askForPlayer();
+			Players.askForNewPlayer();
 		}
 		// Setup done
 		else {
 			Homey.log("All setup, let's play!");
 			Homey.log(this.names);
 			setupDone = true;
+			RussianRoulette.intialize();
 		}
+	},
+	askForNewPlayer: function () {
+		Homey.log("What is the name of player " + (this.total + 1) + "?");
 	}
 };
 
+var RussianRoulette = {
+	title: 'Russian Roulette',
+	chamber: [1,2,3,4,5,6,7,8],
+	bullet: 4,
+	intialize: function () {
+		Homey.log("Let's start Russian roulette, are you ready?");
+	},
+	move: function() {
+		Homey.log(Players.names[0] + " be prepared...");
+		var result = Math.floor((Math.random() * this.chamber.length));
+		Homey.log(this.chamber);
+		Homey.log(this.chamber[result]);
 
-var askForPlayer = function ( ) {
-	Homey.log("What is the name of player " + (Players.total + 1) + "?");
+		if(this.chamber[result] == this.bullet){
+			Homey.log("YOU ARE DEAD");
+		} else {
+			Homey.log('Oef, just safe');
+		}
+		this.chamber.splice(result, 1);
+
+		Homey.log("Ready for the next move?");
+	}
+
 };
-
-
-
 
 App.prototype.speech = function( speech ) {
 	
 	// loop all triggers
     speech.triggers.forEach(function(trigger){
+		Homey.log(trigger);
 		// Start a game
         if( trigger.id == 'game' ) {
 			// Game mode on
@@ -68,19 +89,23 @@ App.prototype.speech = function( speech ) {
 			
 			// Init players
 			numberOfPlayers = parseInt(trigger.id);
-			askForPlayer();
+			Players.askForNewPlayer();
 		} 
 		else if ( trigger.id == 'robin' ) {
 			Homey.log('Added Robin');
-			Players.initPlayer(trigger.id);
+			Players.addPlayer(trigger.id);
 		}
 		else if ( trigger.id == 'floris' ) {
 			Homey.log('Added Floris');
-			Players.initPlayer(trigger.id);
+			Players.addPlayer(trigger.id);
 		}
 		else if ( trigger.id == 'emile' ) {
 			Homey.log('Added Emile');
-			Players.initPlayer(trigger.id);
+			Players.addPlayer(trigger.id);
+		}
+		// Russian Roulette
+		else if (trigger.id == 'yes') {
+			RussianRoulette.move();
 		}
 		// Quit game mode
 		else if ( trigger.id == 'quit') {
