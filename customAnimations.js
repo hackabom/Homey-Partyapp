@@ -1,9 +1,11 @@
-var one = require('onecolor');
+// Require onecolor for coloring the LEDs
+var One = require('onecolor');
 
 module.exports = {
-    playerSegment: function(){
+    // Lights up one segment of the LED ring representing a player
+    playerSegment: function(playerID, numberOfPlayers){
         var colors = ['blue','red','green','yellow','orange','purple'];
-        var ledsPP = Math.round(30/Players.total);
+        var ledsPP = Math.round(30/numberOfPlayers);
         var animation = [];
         for( var f = 0; f < 30; f++ ) {
             var frame = {
@@ -12,9 +14,9 @@ module.exports = {
             };
 
             for( var i = 0; i < 30; i++ ) {
-                var color = one(colors[Players.id]).saturation(0.1);
+                var color = One(colors[playerID]).saturation(0.1);
 
-                // one player segment
+                // One player segment
                 for( var j = 0; j < ledsPP; j++ ) {
                     if(i==(f+j)%30){
                         color = color.saturation(1);
@@ -31,6 +33,7 @@ module.exports = {
         }
         Homey.manager('ledring').animate(animation);
     },
+    // Lights up LED ring in color : curColor, while rotating
     rotateColor: function(curColor){
         var animation = [];
         for( var f = 0; f < 30; f++ ) {
@@ -40,7 +43,7 @@ module.exports = {
             };
 
             for( var i = 0; i < 30; i++ ) {
-                var color = one(curColor).saturation(0.1);
+                var color = One(curColor).saturation(0.1);
 
                 // create a tail
                 for( var j = 0; j < 4; j++ ) {
@@ -59,6 +62,7 @@ module.exports = {
         }
         Homey.manager('ledring').animate(animation);
     },
+    // Flashes red
     bang: function(){
         var animation = [];
         var brightness = 1;
@@ -69,7 +73,7 @@ module.exports = {
             };
 
             for( var i = 0; i < 30; i++ ) {
-                var color = one('red').saturation(brightness);
+                var color = One('red').saturation(brightness);
                 // decrease brightness
                 frame.pixels.push([
                     Math.round(255 * color.red()),
@@ -87,6 +91,7 @@ module.exports = {
             this.stop();
         }
     },
+    // Stops animation
     stop: function(){
         var animation = [];
         Homey.manager('ledring').animate(animation);

@@ -1,8 +1,10 @@
+// Include animations
 var Animate = require('./customAnimations.js');
 
+// Twister game module
 module.exports = {
     title: "Twister",
-    limb: ["right foot", "left foot", "right hand", "left hand"],
+    action: ["right foot", "left foot", "right hand", "left hand"],
     color: ["red","green","yellow","blue"],
     running: false,
     initialize: function() {
@@ -11,11 +13,16 @@ module.exports = {
     },
     nextMove: function () {
 
-        var curColor = this.color[Math.floor(Math.random() * 4)];
-        Homey.log('Everyone! Put your ' + this.limb[Math.floor(Math.random() * 4)] + ' on ' + curColor + '!');
+        // Get random color
+        var rndColor = this.color[Math.floor(Math.random() * 4)];
 
-        Animate.rotateColor(curColor);
+        // Announce new move
+        Homey.log('Everyone! Put your ' + this.action[Math.floor(Math.random() * 4)] + ' on ' + rndColor + '!');
 
+        // Perform nice animation
+        Animate.rotateColor(rndColor);
+
+        // Ask if ready for next move
         Homey.log("Ready for the next move?");
     }
 };

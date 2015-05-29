@@ -28,7 +28,8 @@
       "synonyms": {
         "en": [
           "spel",
-          "play-a-game"
+          "play-a-game",
+          "game"
         ]
       }
     },
@@ -142,6 +143,25 @@
       "synonyms": {
         "en": [
           "twister"
+        ]
+      }
+    },
+    {
+      "id": "bottle",
+      "importance": 1,
+      "synonyms": {
+        "en": [
+          "spin",
+          "bottle"
+        ]
+      }
+    },
+    {
+      "id": "spin again",
+      "importance": 1,
+      "synonyms": {
+        "en": [
+          "spin-again"
         ]
       }
     }
