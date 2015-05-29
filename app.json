@@ -1,0 +1,138 @@
+{
+  "id": "nl.athom.hello",
+  "version": "1.0.0",
+  "name": {
+    "en": "Hello World!",
+    "nl": "Hallo wereld"
+  },
+  "description": {
+    "en": "Example app for Homey 123",
+    "nl": "Dit is een voorbeeld :)",
+    "fr": "baguette?"
+  },
+  "author": {
+    "name": "Emile Nijssen",
+    "email": "homey@weejewel.net"
+  },
+  "dependencies": {
+    "socket.io": "^1.1.0"
+  },
+  "permissions": [
+    "homey:manager:speech-output",
+    "homey:manager:speech-ledring"
+  ],
+  "speech": [
+    {
+      "id": "game",
+      "importance": "1",
+      "synonyms": {
+        "en": [
+          "spel",
+          "play-a-game"
+        ]
+      }
+    },
+    {
+      "id": "1",
+      "importance": "1",
+      "synonyms": {
+        "en": [
+          "one"
+        ]
+      }
+    },
+    {
+      "id": "2",
+      "importance": "1",
+      "synonyms": {
+        "en": [
+          "two"
+        ]
+      }
+    },
+    {
+      "id": "3",
+      "importance": "1",
+      "synonyms": {
+        "en": [
+          "three"
+        ]
+      }
+    },
+    {
+      "id": "4",
+      "importance": "1",
+      "synonyms": {
+        "en": [
+          "four"
+        ]
+      }
+    },
+    {
+      "id": "5",
+      "importance": "1",
+      "synonyms": {
+        "en": [
+          "five"
+        ]
+      }
+    },
+    {
+      "id": "quit",
+      "importance": "1",
+      "synonyms": {
+        "en": [
+          "quit"
+        ]
+      }
+    },
+    {
+      "id": "robin",
+      "importance": "1",
+      "synonyms": {
+        "en": [
+          "robin"
+        ]
+      }
+    },
+    {
+      "id": "floris",
+      "importance": "1",
+      "synonyms": {
+        "en": [
+          "floris"
+        ]
+      }
+    },
+    {
+      "id": "emile",
+      "importance": 0.3,
+      "synonyms": {
+        "en": [
+          "emiel",
+          "emile"
+        ]
+      }
+    }
+  ],
+  "flow": {
+    "triggers": [
+      {
+        "method": "example_trigger",
+        "title": {
+          "en": "Example Trigger",
+          "nl": "Voorbeeld Trigger"
+        },
+        "args": [
+          {
+            "name": "input",
+            "type": "text",
+            "placeholder": {
+              "en": "Enter something..."
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
